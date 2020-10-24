@@ -122,7 +122,7 @@
         "solder_paste_margin_ratio": -0.0
       },
       "track_widths": [
-        0.25,
+        0.0,
         0.3,
         0.6,
         0.8,
@@ -132,8 +132,8 @@
       ],
       "via_dimensions": [
         {
-          "diameter": 0.8,
-          "drill": 0.4
+          "diameter": 0.0,
+          "drill": 0.0
         },
         {
           "diameter": 0.6,
