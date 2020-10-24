@@ -1,0 +1,5 @@
+(sym_lib_table
+  (lib (name MP8862GQ)(type Legacy)(uri ${KIPRJMOD}/../libs/MP8862GQ.pretty/MP8862GQ.lib)(options "")(descr ""))
+  (lib (name MP8860GQ)(type Legacy)(uri ${KIPRJMOD}/../libs/MP8860GQ.pretty/MP8860GQ.lib)(options "")(descr ""))
+  (lib (name IHLE2525CD)(type Legacy)(uri ${KIPRJMOD}/../libs/IHLE2525CD.pretty/IHLE2525CD.lib)(options "")(descr ""))  
+)

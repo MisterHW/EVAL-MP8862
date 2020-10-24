@@ -1,0 +1,39 @@
+EESchema-LIBRARY Version 2.4
+#encoding utf-8
+#
+# MP8862GQ-0000-Z
+#
+DEF MP8862GQ-0000-Z IC 0 30 Y Y 1 F N
+F0 "IC" 500 500 50 H V L CNN
+F1 "MP8862GQ-0000-Z" 500 400 50 H V L CNN
+F2 "MP8862GQ:MP8862GQ" 1050 100 50 H I L CNN
+F3 "https://www.monolithicpower.com/en/documentview/productdocument/index/version/2/document_type/Datasheet/lang/en/sku/MP8862/document_id/3999/" 1050 0 50 H I L CNN
+F4 "2.8V-22V VIN, 2A IOUT, 4-SWITCH," 1050 -100 50 H I L CNN "Description"
+F5 "1" 1050 -200 50 H I L CNN "Height"
+F6 "Monolithic Power Systems (MPS)" 1050 -300 50 H I L CNN "Manufacturer_Name"
+F7 "MP8862GQ-0000-Z" 1050 -400 50 H I L CNN "Manufacturer_Part_Number"
+F8 "MP8862GQ-0000-Z" 1050 -500 50 H I L CNN "Arrow Part Number"
+F9 "946-MP8862GQ-0000-Z" 1050 -700 50 H I L CNN "Mouser Part Number"
+F10 "https://www.mouser.co.uk/ProductDetail/Monolithic-Power-Systems-MPS/MP8862GQ-0000-Z?qs=OlC7AqGiEDkKRh5K8Xavnw%3D%3D" 1050 -800 50 H I L CNN "Mouser Price/Stock"
+DRAW
+S -400 400 400 -400 0 1 0 N
+X IN 1 -500 100 100 R 50 50 0 0 P
+X AGND 10 500 -100 100 L 50 50 0 0 P
+X GND_2 11 500 0 100 L 50 50 0 0 P
+X OUT 12 500 100 100 L 50 50 0 0 P
+X BST2 13 300 500 100 D 50 50 0 0 P
+X SW2 14 200 500 100 D 50 50 0 0 P
+X SW1 15 -200 500 100 D 50 50 0 0 P
+X BST1 16 -300 500 100 D 50 50 0 0 P
+X GND_1 2 -500 0 100 R 50 50 0 0 P
+X EN 3 -500 -100 100 R 50 50 0 0 P
+X ADD 4 -500 -200 100 R 50 50 0 0 P
+X SCL 5 -150 -500 100 U 50 50 0 0 P
+X SDA 6 -50 -500 100 U 50 50 0 0 P
+X OC 7 50 -500 100 U 50 50 0 0 P
+X ALT 8 150 -500 100 U 50 50 0 0 P
+X VCC 9 500 -200 100 L 50 50 0 0 P
+ENDDRAW
+ENDDEF
+#
+#End Library

@@ -1,0 +1,23 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP IHLE2525CDER100M5A
+D Inductor Power Shielded Wirewound 10uH 20% 100KHz 4.0A 0.0769Ohm DCR 2525 Automotive
+F http://www.farnell.com/datasheets/2619211.pdf
+$ENDCMP
+#
+$CMP IHLE2525CDER4R7M5A
+D Inductor Power Shielded Wirewound 4.7uH 20% 100KHz 5.6A 0.0384Ohm DCR 2525 Automotive
+F http://www.farnell.com/datasheets/2619211.pdf
+$ENDCMP
+#
+$CMP IHLE2525CDER5R6M5A
+D Inductor Power Shielded Wirewound 5.6uH 20% 100KHz 5.3A 0.0456Ohm DCR 2525 Automotive
+F http://www.farnell.com/datasheets/2619211.pdf
+$ENDCMP
+#
+$CMP IHLE2525CDER6R8M5A
+D Inductor Power Shielded Wirewound 6.8uH 20% 100KHz 4.4A 0.0576Ohm DCR 2525 Automotive
+F http://www.farnell.com/datasheets/2619211.pdf
+$ENDCMP
+#
+#End Doc Library

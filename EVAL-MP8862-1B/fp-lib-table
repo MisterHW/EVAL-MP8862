@@ -1,0 +1,5 @@
+(fp_lib_table
+  (lib (name MP8862GQ)(type KiCad)(uri ${KIPRJMOD}/../libs/MP8862GQ.pretty)(options "")(descr ""))
+  (lib (name MP8860GQ)(type KiCad)(uri ${KIPRJMOD}/../libs/MP8860GQ.pretty)(options "")(descr ""))
+  (lib (name IHLE2525CD)(type KiCad)(uri ${KIPRJMOD}/../libs/IHLE2525CD.pretty)(options "")(descr "")) 
+)
