@@ -104,7 +104,7 @@ Feedback is always welcome.
 
 **Legal Disclaimer**
 
-Excepts of technical documentation published by the manufacturer are reproduced here for the purposes of accurate representation of device properties and technical discussion.
+Excerpts of technical documentation published by the manufacturer (MPS) are reproduced here for the purposes of accurate representation of device properties and technical discussion.
 
 PCB design license: [Creative Commons - Attribution - ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/)
 
