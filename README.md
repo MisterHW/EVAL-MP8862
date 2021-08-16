@@ -4,7 +4,7 @@ EVAL-MP8862 is a compact and self-contained DCDC module for 2.8 .. 22 V in to 1 
 
 In its compact 13x25 mm² form factor with 2.54 mm (0.1") pitch pin header, EVAL-MP8862 can be used for evaluation on the breadboard as well as in application circuits. 
 
-![pcb views](/img/EVAL-MP8862_views.png)
+![pcb views](img/EVAL-MP8862_views.png)
 
 The project is created using a nightly build of [KiCad](https://kicad-pcb.org/), and the board files should be supported by KiCad v6 and higher.
 
@@ -28,7 +28,7 @@ EVAL-MP8862 can immediately be used for applications that require >= 5.0 V outpu
 
 ## Schematic
 
-![EVAL-MP8862-1B_schmatic](/img/EVAL-MP8862-1B_schematic.png)
+![EVAL-MP8862-1B_schmatic](img/EVAL-MP8862-1B_schematic.png)
 
 
 ## Control Interface
@@ -39,15 +39,55 @@ I²C device addresses can be resistor-programmed with generous tolerance.
 
 ![I²C addresses](img/MP886_addresses.PNG)
 
-I²C communication follows a common [I²C frame structure](img/MP8862_I2C_transfers.PNG) with single and multi-register write, and single-register read operations.
+I²C communication follows a common [I²C frame structure](img/MP8862_I2C_transfers.PNG) with single and multi-register write, and (officially) single-register read operations. See more below.
 
-The 11 bit voltage setpoint and 7 bit current limit values are configured via VOUT_H:VOUT_L and IOUT_LIM registers. 
+The 11 bit voltage setpoint and 7 bit current limit values are configured via VOUT\_H:VOUT\_L and IOUT\_LIM registers. 
 
 ![Register Map](img/MP8862_register_map.PNG)
 
 Default values can only be set at the factory. The defaults for the marketed -0000 variant are given below. Note in particular that "Output Voltage Discharge Mode" is "Enabled", which ensures a > 50 ms sustain time after EN is pulled low, during which powerdown is not entered and the register contents can be read and written.
 
 ![MP8862 reset defaults](img/MP8862_defaults.PNG)
+
+### I2C multi-byte reads
+
+"page 23" (no figure number or caption given) shows a single-byte read operation. Since NACK is issued by the bus master, one could test how the device responds to ACK and continued reading of the form:
+
+    S
+    deviceAddress << 1 | 0 : ACK : REG_ADDR_K : ACK
+    Sr
+    deviceAddress << 1 | 1 : ACK : BYTE K [: ACK : BYTE K+1 [ : ... ]] : NACK
+    P
+
+Indeed, it turns out that  reading multiple bytes in series is legitimate. The PulseView capture + decoding shows four bytes read, starting at address 0x00:
+
+![](doc/MP8862_read_multiple.png)
+
+How far can this be taken? Reading 256 or more bytes:
+
+![](doc/MP8862_read_oversize_block.png)
+
+Several observations can be made: 
+1. Reading past ranges of documented registers is allowed.
+2. An arbitrary number of bytes can be read.
+3. There are non-zero registers outside the documented range of registers.
+4. The register counter does not seem to wrap around, even when reading 128 or more bytes.
+
+Here are the register contents after power-up into normal operation with Enable pulled high:
+
+![](doc/MP8862_read_0x00_0x7F.png)
+
+The documented registers are shown on gray background. Some registers which have an actual purpose may read as zero and cannot be recognized as such, and may be read-only, so write-readback tests may fail to expose them.
+
+Testing another chip, the 0x40..0x4F block seems to be identical and probably contains OTP defaults for the registers. The 0x50..05F block however contains differing values:
+
+	0x50 : 02 02 C1 00 00 ..
+ 
+One possible explanation is that we are looking at the MP8862 internal calibration coefficients here. MPS determines these in-house for each chip. There is reason to believe that the OTP memory is not divided up into banks for factory calibration and power-up defaults, giving rise to the inconvenience that customers cannot set power-up defaults during their own manufacturing process.
+
+When reading 255 or more bytes, [something bad happens](doc/read_0x00_0xFF_uart_starts_out_of_order_STM32F7_potential_problem.PNG) at the end (out-of-order execution of a subsequent UART transmission, NACK and STOP are missing) but probably the STM32F7 I2C master used for testing is to blame in this case.
+
+**To conclude this side quest**, reading multiple consecutive register addresses is proven to work, and (some) defaults seem to be readable. The addresses are not guaranteed and may change with later revisions, but Device ID and IC Revision should make this traceable. The read sequence format is desribed above, following a regular memory read pattern.
 
 ## Power-Up Sequence
 
@@ -72,7 +112,7 @@ Hypothesis:
 
 The sequence is visualized in the chart below. See the datasheet for statements that support some of the points.
 
-![MP8862GQ-0000 power-up sequence](/doc/MP8862_powerup_conf_workaround.png)
+![MP8862GQ-0000 power-up sequence](doc/MP8862_powerup_conf_workaround.png)
 
 We'd need to decap and investigate one of those chips to see how they're put together, but in the discussion with an MPS FAE we concluded that assuming the I²C peripheral is deterministic in its ACK behavior, this routine should work and unlock the full usability of the MP8862.
 
@@ -80,7 +120,7 @@ I personally remain hopeful that Monolithic Power Systems consider providing ano
 
 ## "One-Time Programmable"
 
-EVAL-MP8862 is built around the MP8862GQ-0000. The default configuration (0000) of this chip is such that when enabling, the output rises to +5.0 V. The output can be disabled and the voltage setpoint can be configured by setting the appropriate register values. When pulling the EN pin low, MP8862 enter powerdown. When the chip is re-enabled, default register settings are restored, and with them "output ON" and "5.0 V". 
+EVAL-MP8862 is built around the MP8862GQ-0000. The default configuration (0000) of this chip is such that when enabling, the output rises to +5.0 V. The output can be disabled and the voltage setpoint can be configured by setting the appropriate register values. When pulling the EN pin low, MP8862 enters powerdown. When the chip is re-enabled, default register settings are restored, and with them "output ON" and "5.0 V". 
 
 A general purpose digitally controlled variant that defaults to "output disabled on power-up" can be procured upon request only. The FAEs I contacted thankfully responded quickly and were able to provide some insights. The biggest catch is that the term "one-time programmable" used in the datasheet actually is a misnomer: configuration bits are written into OTP memory at the factory, along with timming bits. This ties the behavior configuration to the factory calibration and does not allow the designer to set up the chip via I²C during PCB production. Unfortunately I only realized this when it was too late to scrap the design, as I had assumed that the programming sequence can be obtained by contacting MPS, and then one would be good to go.
 
