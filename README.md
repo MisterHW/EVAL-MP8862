@@ -65,7 +65,7 @@ Indeed, it turns out that  reading multiple bytes in series is legitimate. The P
 
 How far can this be taken? Reading 256 or more bytes:
 
-![](img/MP8862_read_oversize_block.png)
+![](img/MP8862_read_0x00_0xFF.png)
 
 Several observations can be made: 
 1. Reading past ranges of documented registers is allowed.
