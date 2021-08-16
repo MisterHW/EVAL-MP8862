@@ -61,11 +61,11 @@ Default values can only be set at the factory. The defaults for the marketed -00
 
 Indeed, it turns out that  reading multiple bytes in series is legitimate. The PulseView capture + decoding shows four bytes read, starting at address 0x00:
 
-![](doc/MP8862_read_multiple.png)
+![](img/MP8862_read_multiple.png)
 
 How far can this be taken? Reading 256 or more bytes:
 
-![](doc/MP8862_read_oversize_block.png)
+![](img/MP8862_read_oversize_block.png)
 
 Several observations can be made: 
 1. Reading past ranges of documented registers is allowed.
@@ -75,7 +75,7 @@ Several observations can be made:
 
 Here are the register contents after power-up into normal operation with Enable pulled high:
 
-![](doc/MP8862_read_0x00_0x7F.png)
+![](img/MP8862_read_0x00_0x7F.png)
 
 The documented registers are shown on gray background. Some registers which have an actual purpose may read as zero and cannot be recognized as such, and may be read-only, so write-readback tests may fail to expose them.
 
@@ -85,9 +85,9 @@ Testing another chip, the 0x40..0x4F block seems to be identical and probably co
  
 One possible explanation is that we are looking at the MP8862 internal calibration coefficients here. MPS determines these in-house for each chip. There is reason to believe that the OTP memory is not divided up into banks for factory calibration and power-up defaults, giving rise to the inconvenience that customers cannot set power-up defaults during their own manufacturing process.
 
-When reading 255 or more bytes, [something bad happens](doc/read_0x00_0xFF_uart_starts_out_of_order_STM32F7_potential_problem.PNG) at the end (out-of-order execution of a subsequent UART transmission, NACK and STOP are missing) but probably the STM32F7 I2C master used for testing is to blame in this case.
+When reading 255 or more bytes, [something bad happens](img/read_0x00_0xFF_uart_starts_out_of_order_STM32F7_potential_problem.PNG) at the end (out-of-order execution of a subsequent UART transmission, NACK and STOP are missing) but probably the STM32F7 I2C master used for testing is to blame in this case.
 
-**To conclude this side quest**, reading multiple consecutive register addresses is proven to work, and (some) defaults seem to be readable. The addresses are not guaranteed and may change with later revisions, but Device ID and IC Revision should make this traceable. The read sequence format is desribed above, following a regular memory read pattern.
+**To conclude this side quest**, reading multiple consecutive register addresses is proven to work, and (some) defaults seem to be readable. The addresses are not guaranteed and may change with later revisions, but Device ID and IC Revision should make this traceable. The read sequence format is described above, following a regular memory read pattern.
 
 ## Power-Up Sequence
 
