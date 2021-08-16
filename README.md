@@ -79,7 +79,7 @@ Here are the register contents after power-up into normal operation with Enable 
 
 The documented registers are shown on gray background. Some registers which have an actual purpose may read as zero and cannot be recognized as such, and may be read-only, so write-readback tests may fail to expose them.
 
-Testing another chip, the 0x40..0x4F block seems to be identical and probably contains OTP defaults for the registers. The 0x50..05F block however contains differing values:
+Testing another chip, the 0x40..0x4F block seems to be identical and probably contains OTP defaults for the registers. The 0x50..0x5F block however contains differing values:
 
 	0x50 : 02 02 C1 00 00 ..
  
