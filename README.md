@@ -118,7 +118,7 @@ We'd need to decap and investigate one of those chips to see how they're put tog
 
 I personally remain hopeful that Monolithic Power Systems consider providing another variant that defaults to CTL1.EN = 0 to enable reliable I²C-based control in a stock product, making this workaround obsolete. 
 
-**Update: experimental proof**
+### Update: Experimental Proof
 
 The diagram below shows an MP8862Q-0000 connected to pin 1 of a PCA9536 GPIO expander (address 0x41). Writing to its OUTPUT0 register + STOP causes a 0->1 transition of the MP8862 EN input. Repeated attempts to write CTL1 with an appropriate value (EN = 0) are ultimately effective at disabling the output. This concludes the time-critial part, after which VOUTL, VOUTH and finally GO can be written to update the output voltage setpoint. STATUS is then polled to check for its PG == 1.
 
