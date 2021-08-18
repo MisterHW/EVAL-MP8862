@@ -118,6 +118,16 @@ We'd need to decap and investigate one of those chips to see how they're put tog
 
 I personally remain hopeful that Monolithic Power Systems consider providing another variant that defaults to CTL1.EN = 0 to enable reliable I²C-based control in a stock product, making this workaround obsolete. 
 
+**Update: experimental proof**
+
+The diagram below shows an MP8862Q-0000 connected to pin 1 of a PCA9536 GPIO expander (address 0x41). Writing to its OUTPUT0 register + STOP causes a 0->1 transition of the MP8862 EN input. Repeated attempts to write CTL1 with an appropriate value (EN = 0) are ultimately effective at disabling the output. This concludes the time-critial part, after which VOUTL, VOUTH and finally GO can be written to update the output voltage setpoint. STATUS is then polled to check for its PG == 1.
+
+![MP8862Q-0000 critical power-up sequence I2C decoded](img/MP8862_critical_powerup.png)
+
+The number of attempts is limited to 4 at an I2C clock speed of 400 kHz, allowing just enough time to send another GPIO expander update which would set  the EN input to 0 again within < 200 µs. Using PIO or a faster GPIO expander, 13 (48) attempts are possible at 1 MHz (3.4 MHz).
+
+To ensure voltage excursions are indeed controlled as the converter starts up, the LDO and output voltages can be captured.
+
 ## "One-Time Programmable"
 
 EVAL-MP8862 is built around the MP8862GQ-0000. The default configuration (0000) of this chip is such that when enabling, the output rises to +5.0 V. The output can be disabled and the voltage setpoint can be configured by setting the appropriate register values. When pulling the EN pin low, MP8862 enters powerdown. When the chip is re-enabled, default register settings are restored, and with them "output ON" and "5.0 V". 
