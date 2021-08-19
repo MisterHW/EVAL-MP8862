@@ -126,7 +126,11 @@ The diagram below shows an MP8862Q-0000 connected to pin 1 of a PCA9536 GPIO exp
 
 The number of attempts is limited to 4 at an I2C clock speed of 400 kHz, allowing just enough time to send another GPIO expander update which would set  the EN input to 0 again within < 200 µs. Using PIO or a faster GPIO expander, 13 (48) attempts are possible at 1 MHz (3.4 MHz).
 
-To ensure voltage excursions are indeed controlled as the converter starts up, the LDO and output voltages can be captured.
+To ensure voltage excursions are indeed controlled as the converter starts up, the LDO and output voltages can be captured along with the enable pin state. CTL2 defaults to SS = 0b11, or 900 µs ramp time for 0 to 5 V. A 200 µs delay between hardware EN rising edge and CTL1 write STOP can be split up in ~50 µs for LDO.PG delay, and 150 µs into the 900 µs ramp time. This translates into a peak of about 5.0 V * 150 / 900 = 0.83(3) V.
+
+#### Alternative Timing
+
+If this initial transient of < 1 V cannot be tolerated, another start-up sequence can be implemented which creates hardware EN pulses starting at 50 µs and getting longer each time by 10 µs. Adequate discharge time for the LDO bypass capacitor needs to be provided between retries. Immediately disabling hardware EN first allows ~50 ms timeout to configure the device (disable soft EN, set new VOUT) and to re-enable hardware EN.
 
 ## "One-Time Programmable"
 
